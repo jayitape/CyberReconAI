@@ -1,0 +1,19 @@
+# CyberRecon AI Configuration
+
+app:
+  name: CyberRecon AI
+  version: 1.0.0
+
+network:
+  timeout: 10
+  user_agent: "CyberReconAI/1.0"
+
+report:
+  output_directory: "output"
+  html_report: true
+  pdf_report: true
+  json_export: true
+
+logging:
+  level: INFO
+  log_file: cyberrecon.log
