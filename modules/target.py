@@ -1,16 +1,17 @@
 """
 Target Intelligence Module
 
-Performs basic target information gathering for
-authorized security assessments only.
+Performs basic target information gathering
+for authorized security assessments only.
 
 Features:
 - URL normalization
 - URL validation
 - Domain extraction
 - IP resolution
-- Connectivity check
+- Website connectivity check
 """
+
 
 from typing import Dict
 from urllib.parse import urlparse
@@ -25,6 +26,7 @@ from modules.logger import setup_logger
 logger = setup_logger()
 
 
+
 def normalize_url(url: str) -> str:
     """
     Normalize target URL.
@@ -36,8 +38,11 @@ def normalize_url(url: str) -> str:
         str: Normalized URL.
     """
 
-    if not url.startswith(("http://", "https://")):
+    if not url.startswith(
+        ("http://", "https://")
+    ):
         url = "https://" + url
+
 
     return url
 
@@ -45,27 +50,31 @@ def normalize_url(url: str) -> str:
 
 def validate_url(url: str) -> bool:
     """
-    Validate URL structure.
+    Validate URL format.
 
     Args:
         url (str): Target URL.
 
     Returns:
-        bool: Validation result.
+        bool: True if valid else False.
     """
 
     try:
+
         parsed_url = urlparse(url)
+
 
         if parsed_url.netloc:
             return True
 
+
         return False
+
 
     except Exception as error:
 
         logger.error(
-            "URL validation error: %s",
+            "URL validation failed: %s",
             error
         )
 
@@ -75,7 +84,7 @@ def validate_url(url: str) -> bool:
 
 def extract_domain(url: str) -> str:
     """
-    Extract domain name from URL.
+    Extract domain from URL.
 
     Args:
         url (str): Target URL.
@@ -86,13 +95,14 @@ def extract_domain(url: str) -> str:
 
     parsed_url = urlparse(url)
 
+
     return parsed_url.netloc
 
 
 
 def resolve_ip(domain: str) -> str:
     """
-    Resolve domain to IP address.
+    Resolve domain IP address.
 
     Args:
         domain (str): Target domain.
@@ -103,7 +113,10 @@ def resolve_ip(domain: str) -> str:
 
     try:
 
-        ip_address = socket.gethostbyname(domain)
+        ip_address = socket.gethostbyname(
+            domain
+        )
+
 
         logger.info(
             "IP resolved for %s : %s",
@@ -111,15 +124,19 @@ def resolve_ip(domain: str) -> str:
             ip_address
         )
 
+
         return ip_address
 
 
+
     except socket.gaierror:
+
 
         logger.warning(
             "Unable to resolve IP for %s",
             domain
         )
+
 
         return "Unknown"
 
@@ -127,7 +144,7 @@ def resolve_ip(domain: str) -> str:
 
 def check_connectivity(url: str) -> bool:
     """
-    Check whether target website is reachable.
+    Check website availability.
 
     Args:
         url (str): Target URL.
@@ -138,25 +155,72 @@ def check_connectivity(url: str) -> bool:
 
     try:
 
-        requests.get(
+        headers = {
+
+            "User-Agent":
+            "Mozilla/5.0 CyberReconAI Security Assessment"
+
+        }
+
+
+        response = requests.get(
+
             url,
-            timeout=5
+
+            headers=headers,
+
+            timeout=10,
+
+            allow_redirects=True
+
         )
 
+
         logger.info(
-            "Target reachable: %s",
-            url
+            "Target reachable: %s | Status Code: %s",
+            url,
+            response.status_code
         )
+
 
         return True
 
 
-    except requests.RequestException:
+
+    except requests.exceptions.Timeout:
+
 
         logger.warning(
-            "Target unreachable: %s",
+            "Connection timeout: %s",
             url
         )
+
+
+        return False
+
+
+
+    except requests.exceptions.ConnectionError:
+
+
+        logger.warning(
+            "Connection failed: %s",
+            url
+        )
+
+
+        return False
+
+
+
+    except requests.RequestException as error:
+
+
+        logger.error(
+            "Request error: %s",
+            error
+        )
+
 
         return False
 
@@ -192,6 +256,7 @@ def analyze_target(url: str) -> Dict[str, str]:
         )
 
 
+
     domain = extract_domain(
         normalized_url
     )
@@ -207,21 +272,32 @@ def analyze_target(url: str) -> Dict[str, str]:
     )
 
 
+
     target_info = {
 
-        "url": normalized_url,
+        "url":
+        normalized_url,
 
-        "domain": domain,
 
-        "ip": ip_address,
+        "domain":
+        domain,
 
-        "scheme": urlparse(
+
+        "ip":
+        ip_address,
+
+
+        "scheme":
+        urlparse(
             normalized_url
         ).scheme,
 
-        "reachable": str(reachable)
+
+        "reachable":
+        str(reachable)
 
     }
+
 
 
     logger.info(

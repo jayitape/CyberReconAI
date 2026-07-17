@@ -17,7 +17,7 @@ def show_banner() -> None:
 
 Website Security Assessment Toolkit
 
-Version : 1.0.6
+Version : 1.0.7
 
 For Authorized Security Assessments Only
 """
