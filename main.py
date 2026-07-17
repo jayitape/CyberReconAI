@@ -6,393 +6,117 @@ Main Application Entry Point
 Authorized Defensive Security Assessment Toolkit
 """
 
-
 import sys
 
-
 from modules.banner import show_banner
-
 from modules.logger import setup_logger
-
 from modules.cli import parse_arguments
-
 from modules.target import analyze_target
-
 from modules.whois_lookup import get_whois_info
-
 from modules.dns_lookup import get_dns_records
-
 from modules.ssl_checker import get_ssl_info
-
 from modules.http_headers import get_security_headers
-
 from modules.technology_detector import TechnologyDetector
-
 from modules.subdomain_enum import get_subdomains
-
 from modules.port_scanner import scan_ports
-
-
+from modules.service_detector import detect_services
+from modules.robots_analyzer import analyze_robots_txt
 
 
 def main():
-    """
-    Execute complete CyberRecon AI workflow.
-    """
-
-
-    # ==============================
-    # Banner
-    # ==============================
-
     show_banner()
-
-
-
-    # ==============================
-    # Logger
-    # ==============================
-
     logger = setup_logger()
-
-
-    logger.info(
-        "CyberRecon AI started"
-    )
-
-
-
-    # ==============================
-    # CLI Input
-    # ==============================
+    logger.info("CyberRecon AI started")
 
     args = parse_arguments()
-
     target_url = args.url
 
-
-
-    print(
-        f"\n[+] Target : {target_url}"
-    )
-
-
+    print(f"\n[+] Target : {target_url}")
 
     try:
+        print("\n========== TARGET INFORMATION ==========")
+        target_info = analyze_target(target_url)
 
-
-        # ==============================
-        # Target Intelligence
-        # ==============================
-
-        print(
-            "\n========== TARGET INFORMATION =========="
-        )
-
-
-        target_info = analyze_target(
-            target_url
-        )
-
-
-        for key, value in target_info.items():
-
-            print(
-                f"{key}: {value}"
-            )
-
+        for k, v in target_info.items():
+            print(f"{k}: {v}")
 
         domain = target_info["domain"]
-
         normalized_url = target_info["url"]
 
+        print("\n========== WHOIS INFORMATION ==========")
+        for k, v in get_whois_info(domain).items():
+            print(f"{k}: {v}")
 
+        print("\n========== DNS ENUMERATION ==========")
+        for k, v in get_dns_records(domain).items():
+            print(f"{k}: {v}")
 
+        print("\n========== SSL/TLS ANALYSIS ==========")
+        for k, v in get_ssl_info(domain).items():
+            print(f"{k}: {v}")
 
-        # ==============================
-        # WHOIS
-        # ==============================
+        print("\n========== HTTP SECURITY HEADERS ==========")
+        for k, v in get_security_headers(normalized_url).items():
+            print(f"{k}: {v}")
 
-        print(
-            "\n========== WHOIS INFORMATION =========="
-        )
+        print("\n========== TECHNOLOGY DETECTION ==========")
+        tech = TechnologyDetector(normalized_url).analyze()
 
+        print("\nWeb Server:")
+        for x in tech["server"]:
+            print(f"- {x}")
 
-        whois_info = get_whois_info(
-            domain
-        )
+        print("\nCMS:")
+        for x in tech["cms"]:
+            print(f"- {x}")
 
+        print("\nFrameworks:")
+        for x in tech["frameworks"]:
+            print(f"- {x}")
 
-        for key, value in whois_info.items():
+        print("\nJavaScript Libraries:")
+        for x in tech["javascript"]:
+            print(f"- {x}")
 
-            print(
-                f"{key}: {value}"
-            )
+        print("\n========== SUBDOMAIN ENUMERATION ==========")
+        result = get_subdomains(domain)
 
-
-
-
-        # ==============================
-        # DNS Enumeration
-        # ==============================
-
-        print(
-            "\n========== DNS ENUMERATION =========="
-        )
-
-
-        dns_info = get_dns_records(
-            domain
-        )
-
-
-        for record, values in dns_info.items():
-
-            print(
-                f"{record}: {values}"
-            )
-
-
-
-
-        # ==============================
-        # SSL/TLS Analysis
-        # ==============================
-
-        print(
-            "\n========== SSL/TLS ANALYSIS =========="
-        )
-
-
-        ssl_info = get_ssl_info(
-            domain
-        )
-
-
-        for key, value in ssl_info.items():
-
-            print(
-                f"{key}: {value}"
-            )
-
-
-
-
-        # ==============================
-        # HTTP Security Headers
-        # ==============================
-
-        print(
-            "\n========== HTTP SECURITY HEADERS =========="
-        )
-
-
-        header_info = get_security_headers(
-            normalized_url
-        )
-
-
-        for key, value in header_info.items():
-
-            print(
-                f"{key}: {value}"
-            )
-
-
-
-
-        # ==============================
-        # Technology Detection
-        # ==============================
-
-        print(
-            "\n========== TECHNOLOGY DETECTION =========="
-        )
-
-
-        detector = TechnologyDetector(
-            normalized_url
-        )
-
-
-        technology_info = detector.analyze()
-
-
-
-        print(
-            "\nWeb Server:"
-        )
-
-        for item in technology_info["server"]:
-
-            print(
-                f"- {item}"
-            )
-
-
-
-        print(
-            "\nCMS:"
-        )
-
-        for item in technology_info["cms"]:
-
-            print(
-                f"- {item}"
-            )
-
-
-
-        print(
-            "\nFrameworks:"
-        )
-
-        for item in technology_info["frameworks"]:
-
-            print(
-                f"- {item}"
-            )
-
-
-
-        print(
-            "\nJavaScript Libraries:"
-        )
-
-        for item in technology_info["javascript"]:
-
-            print(
-                f"- {item}"
-            )
-
-
-
-
-        # ==============================
-        # Subdomain Enumeration
-        # ==============================
-
-        print(
-            "\n========== SUBDOMAIN ENUMERATION =========="
-        )
-
-
-        subdomains = get_subdomains(
-            domain
-        )
-
-
-        if subdomains:
-
-
-            print(
-                f"\nTotal Subdomains Found: {len(subdomains)}"
-            )
-
-
-            for subdomain in subdomains:
-
-                print(
-                    f"- {subdomain}"
-                )
-
-
+        if isinstance(result, dict):
+            subs = result.get("subdomains", [])
         else:
+            subs = result
 
-            print(
-                "No subdomains discovered"
-            )
+        print(f"\nTotal Subdomains Found: {len(subs)}")
+        for sub in subs:
+            print(f"- {sub}")
 
-
-
-
-
-        # ==============================
-        # Port Scanner
-        # ==============================
-
-        print(
-            "\n========== PORT SCANNING =========="
-        )
-
-
-        logger.info(
-            "Starting port scanning"
-        )
-
-
-
-        port_results = scan_ports(
-            domain
-        )
-
-
+        print("\n========== PORT SCANNING ==========")
+        port_results = scan_ports(domain)
 
         if port_results:
-
-
-            print(
-                f"\nOpen Ports Found: {len(port_results)}"
-            )
-
-
-
-            for port in port_results:
-
-
-                print(
-                    f"\nPort: {port['port']}"
-                )
-
-                print(
-                    f"Service: {port['service']}"
-                )
-
-                print(
-                    f"State: {port['state']}"
-                )
-
-                print(
-                    f"Banner: {port['banner']}"
-                )
-
-
-
+            print(f"\nOpen Ports Found: {len(port_results)}")
+            for p in port_results:
+                print(f"\nPort    : {p['port']}")
+                print(f"Service : {p['service']}")
+                print(f"State   : {p['state']}")
+                if p.get("banner"):
+                    print(f"Banner  : {p['banner']}")
         else:
+            print("No open common ports detected")
 
+        print("\n========== SERVICE DETECTION ==========")
+        for s in detect_services(port_results):
+            print(f"\nPort    : {s['port']}")
+            print(f"Service : {s['service']}")
+            print(f"State   : {s['state']}")
 
-            print(
-                "No open common ports detected"
-            )
+        logger.info("CyberRecon AI scan completed successfully")
 
-
-
-        logger.info(
-            "CyberRecon AI scan completed successfully"
-        )
-
-
-
-    except Exception as error:
-
-
-        logger.exception(
-            "Scan failed: %s",
-            error
-        )
-
-
-        print(
-            "\n[!] Scan failed. Check logs."
-        )
-
-
+    except Exception as e:
+        logger.exception("Scan failed: %s", e)
+        print("\n[!] Scan failed. Check logs.")
         sys.exit(1)
 
 
-
-
-
 if __name__ == "__main__":
-
     main()
