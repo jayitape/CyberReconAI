@@ -11,6 +11,7 @@ import sys
 from modules.banner import show_banner
 from modules.logger import setup_logger
 from modules.cli import parse_arguments
+
 from modules.target import analyze_target
 from modules.whois_lookup import get_whois_info
 from modules.dns_lookup import get_dns_records
@@ -21,6 +22,7 @@ from modules.subdomain_enum import get_subdomains
 from modules.port_scanner import scan_ports
 from modules.service_detector import detect_services
 from modules.robots_analyzer import analyze_robots_txt
+from modules.risk_engine import calculate_security_score
 
 
 
@@ -43,12 +45,14 @@ def main():
 
     try:
 
+
         print("\n========== TARGET INFORMATION ==========")
 
         target_info = analyze_target(target_url)
 
 
         for k, v in target_info.items():
+
             print(f"{k}: {v}")
 
 
@@ -60,28 +64,40 @@ def main():
 
         print("\n========== WHOIS INFORMATION ==========")
 
-        for k, v in get_whois_info(domain).items():
+        whois_info = get_whois_info(domain)
+
+        for k, v in whois_info.items():
+
             print(f"{k}: {v}")
 
 
 
         print("\n========== DNS ENUMERATION ==========")
 
-        for k, v in get_dns_records(domain).items():
+        dns_info = get_dns_records(domain)
+
+        for k, v in dns_info.items():
+
             print(f"{k}: {v}")
 
 
 
         print("\n========== SSL/TLS ANALYSIS ==========")
 
-        for k, v in get_ssl_info(domain).items():
+        ssl_info = get_ssl_info(domain)
+
+        for k, v in ssl_info.items():
+
             print(f"{k}: {v}")
 
 
 
         print("\n========== HTTP SECURITY HEADERS ==========")
 
-        for k, v in get_security_headers(normalized_url).items():
+        headers_info = get_security_headers(normalized_url)
+
+        for k, v in headers_info.items():
+
             print(f"{k}: {v}")
 
 
@@ -94,29 +110,34 @@ def main():
         print("\nWeb Server:")
 
         for x in tech["server"]:
+
             print(f"- {x}")
 
 
         print("\nCMS:")
 
         for x in tech["cms"]:
+
             print(f"- {x}")
 
 
         print("\nFrameworks:")
 
         for x in tech["frameworks"]:
+
             print(f"- {x}")
 
 
         print("\nJavaScript Libraries:")
 
         for x in tech["javascript"]:
+
             print(f"- {x}")
 
 
 
         print("\n========== SUBDOMAIN ENUMERATION ==========")
+
 
         result = get_subdomains(domain)
 
@@ -142,16 +163,18 @@ def main():
 
         print("\n========== PORT SCANNING ==========")
 
+
         port_results = scan_ports(domain)
 
 
-
         if port_results:
+
 
             print(f"\nOpen Ports Found: {len(port_results)}")
 
 
             for p in port_results:
+
 
                 print(f"\nPort    : {p['port']}")
 
@@ -175,7 +198,6 @@ def main():
 
 
         robots_info = analyze_robots_txt(normalized_url)
-
 
 
         if robots_info["status"] == "Completed":
@@ -220,10 +242,63 @@ def main():
 
 
 
+        print("\n========== SECURITY RISK SCORE ==========")
+
+
+        risk_report = calculate_security_score(
+
+            headers=headers_info,
+
+            ssl_info=ssl_info,
+
+            robots_info=robots_info,
+
+            ports=port_results,
+
+            subdomains=subs
+
+        )
+
+
+        print(
+            f"\nOverall Security Score : {risk_report['score']}/100"
+        )
+
+
+        print(
+            f"Risk Level : {risk_report['risk_level']}"
+        )
+
+
+        print("\nFindings:")
+
+
+        if risk_report["findings"]:
+
+
+            for finding in risk_report["findings"]:
+
+
+                print(
+                    f"\n[{finding['risk']}] {finding['issue']}"
+                )
+
+
+        else:
+
+
+            print("No security issues detected")
+
+
+
         print("\n========== SERVICE DETECTION ==========")
 
 
-        for s in detect_services(port_results):
+        services = detect_services(port_results)
+
+
+        for s in services:
+
 
             print(f"\nPort    : {s['port']}")
 

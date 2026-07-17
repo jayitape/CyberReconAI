@@ -27,7 +27,7 @@ CyberRecon AI
 
 Website Security Assessment Toolkit
 
-Version : 1.0.14
+Version : 1.0.15
 
 For Authorized Security Assessments Only
 
