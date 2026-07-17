@@ -30,6 +30,8 @@ from modules.technology_detector import TechnologyDetector
 
 from modules.subdomain_enum import get_subdomains
 
+from modules.port_scanner import scan_ports
+
 
 
 
@@ -275,15 +277,9 @@ def main():
         )
 
 
-        logger.info(
-            "Starting subdomain enumeration"
-        )
-
-
         subdomains = get_subdomains(
             domain
         )
-
 
 
         if subdomains:
@@ -301,24 +297,73 @@ def main():
                 )
 
 
-            logger.info(
-                "Subdomain enumeration completed: %s found",
-                len(subdomains)
-            )
-
-
         else:
-
 
             print(
                 "No subdomains discovered"
             )
 
 
-            logger.info(
-                "No subdomains found"
+
+
+
+        # ==============================
+        # Port Scanner
+        # ==============================
+
+        print(
+            "\n========== PORT SCANNING =========="
+        )
+
+
+        logger.info(
+            "Starting port scanning"
+        )
+
+
+
+        port_results = scan_ports(
+            domain
+        )
+
+
+
+        if port_results:
+
+
+            print(
+                f"\nOpen Ports Found: {len(port_results)}"
             )
 
+
+
+            for port in port_results:
+
+
+                print(
+                    f"\nPort: {port['port']}"
+                )
+
+                print(
+                    f"Service: {port['service']}"
+                )
+
+                print(
+                    f"State: {port['state']}"
+                )
+
+                print(
+                    f"Banner: {port['banner']}"
+                )
+
+
+
+        else:
+
+
+            print(
+                "No open common ports detected"
+            )
 
 
 
