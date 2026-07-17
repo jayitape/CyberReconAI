@@ -28,8 +28,6 @@ from modules.http_headers import get_security_headers
 
 from modules.technology_detector import TechnologyDetector
 
-from modules.subdomain_enum import get_subdomains
-
 
 
 
@@ -262,63 +260,6 @@ def main():
             print(
                 f"- {item}"
             )
-
-
-
-
-        # ==============================
-        # Subdomain Enumeration
-        # ==============================
-
-        print(
-            "\n========== SUBDOMAIN ENUMERATION =========="
-        )
-
-
-        logger.info(
-            "Starting subdomain enumeration"
-        )
-
-
-        subdomains = get_subdomains(
-            domain
-        )
-
-
-
-        if subdomains:
-
-
-            print(
-                f"\nTotal Subdomains Found: {len(subdomains)}"
-            )
-
-
-            for subdomain in subdomains:
-
-                print(
-                    f"- {subdomain}"
-                )
-
-
-            logger.info(
-                "Subdomain enumeration completed: %s found",
-                len(subdomains)
-            )
-
-
-        else:
-
-
-            print(
-                "No subdomains discovered"
-            )
-
-
-            logger.info(
-                "No subdomains found"
-            )
-
 
 
 
