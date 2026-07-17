@@ -1,31 +1,49 @@
 """
-CyberRecon AI Banner Module
-Displays the application banner.
+CyberRecon AI
+
+Banner Module
+
+Displays professional CLI banner.
 """
+
 
 from rich.console import Console
 from rich.panel import Panel
 
+
 console = Console()
 
 
+
 def show_banner() -> None:
-    """Display the CyberRecon AI banner."""
+    """
+    Display CyberRecon AI application banner.
+    """
+
 
     banner = """
-[bold cyan]CyberRecon AI[/bold cyan]
+
+CyberRecon AI
 
 Website Security Assessment Toolkit
 
-Version : 1.0.7
+Version : 1.0.9
 
 For Authorized Security Assessments Only
+
 """
 
+
     console.print(
-        Panel.fit(
+
+        Panel(
+
             banner,
+
             title="CyberRecon AI",
-            border_style="green"
+
+            border_style="cyan"
+
         )
+
     )

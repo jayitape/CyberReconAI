@@ -82,7 +82,9 @@ class SecurityHeaderAnalyzer:
 
                 self.url,
 
-                timeout=10,
+                timeout=20,
+
+                allow_redirects=True,
 
                 headers={
                     "User-Agent":
@@ -112,7 +114,6 @@ class SecurityHeaderAnalyzer:
                 "Header collection failed: %s",
                 error
             )
-
 
             return {}
 
@@ -148,6 +149,7 @@ class SecurityHeaderAnalyzer:
                 )
 
 
+
         total_headers = len(
             self.SECURITY_HEADERS
         )
@@ -160,6 +162,7 @@ class SecurityHeaderAnalyzer:
 
 
         score = f"{secure_headers}/{total_headers}"
+
 
 
         self.result = {
@@ -205,6 +208,7 @@ class SecurityHeaderAnalyzer:
         self.fetch_headers()
 
         return self.analyze_headers()
+
 
 
 
