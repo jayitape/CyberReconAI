@@ -11,16 +11,11 @@ from reconnaissance findings
 
 import logging
 
-
 logger = logging.getLogger("CyberReconAI")
 
 
 def calculate_security_score(
-    headers=None,
-    ssl_info=None,
-    robots_info=None,
-    ports=None,
-    subdomains=None
+    headers=None, ssl_info=None, robots_info=None, ports=None, subdomains=None
 ):
     """
     Calculate security score based on findings
@@ -29,31 +24,21 @@ def calculate_security_score(
     score = 100
     findings = []
 
-
     # ==========================
     # HTTP Security Headers
     # ==========================
 
     if headers:
 
-        missing = headers.get(
-            "missing_headers",
-            []
-        )
+        missing = headers.get("missing_headers", [])
 
         for header in missing:
 
             score -= 5
 
-            findings.append({
-
-                "risk": "LOW",
-
-                "issue":
-                f"Missing security header: {header}"
-
-            })
-
+            findings.append(
+                {"risk": "LOW", "issue": f"Missing security header: {header}"}
+            )
 
     # ==========================
     # SSL Certificate
@@ -61,38 +46,21 @@ def calculate_security_score(
 
     if ssl_info:
 
-        days = ssl_info.get(
-            "days_remaining",
-            0
-        )
+        days = ssl_info.get("days_remaining", 0)
 
         if days < 30:
 
             score -= 15
 
-            findings.append({
-
-                "risk": "HIGH",
-
-                "issue":
-                "SSL certificate expires soon"
-
-            })
-
+            findings.append({"risk": "HIGH", "issue": "SSL certificate expires soon"})
 
         elif days < 90:
 
             score -= 5
 
-            findings.append({
-
-                "risk": "LOW",
-
-                "issue":
-                "SSL certificate expiry within 90 days"
-
-            })
-
+            findings.append(
+                {"risk": "LOW", "issue": "SSL certificate expiry within 90 days"}
+            )
 
     # ==========================
     # Robots.txt Analysis
@@ -100,26 +68,18 @@ def calculate_security_score(
 
     if robots_info:
 
-        sensitive = (
-            robots_info
-            .get("summary", {})
-            .get("sensitive_findings", 0)
-        )
-
+        sensitive = robots_info.get("summary", {}).get("sensitive_findings", 0)
 
         if sensitive > 0:
 
             score -= 10
 
-            findings.append({
-
-                "risk": "MEDIUM",
-
-                "issue":
-                f"{sensitive} sensitive path(s) exposed in robots.txt"
-
-            })
-
+            findings.append(
+                {
+                    "risk": "MEDIUM",
+                    "issue": f"{sensitive} sensitive path(s) exposed in robots.txt",
+                }
+            )
 
     # ==========================
     # Open Ports
@@ -131,15 +91,7 @@ def calculate_security_score(
 
             score -= 10
 
-            findings.append({
-
-                "risk": "MEDIUM",
-
-                "issue":
-                "Multiple open ports detected"
-
-            })
-
+            findings.append({"risk": "MEDIUM", "issue": "Multiple open ports detected"})
 
     # ==========================
     # Subdomains
@@ -151,21 +103,14 @@ def calculate_security_score(
 
             score -= 5
 
-            findings.append({
-
-                "risk": "LOW",
-
-                "issue":
-                "Large subdomain footprint detected"
-
-            })
-
+            findings.append(
+                {"risk": "LOW", "issue": "Large subdomain footprint detected"}
+            )
 
     # Prevent negative score
 
     if score < 0:
         score = 0
-
 
     # Risk Level
 
@@ -181,19 +126,6 @@ def calculate_security_score(
 
         risk_level = "HIGH"
 
+    logger.info("Security risk score generated")
 
-
-    logger.info(
-        "Security risk score generated"
-    )
-
-
-    return {
-
-        "score": score,
-
-        "risk_level": risk_level,
-
-        "findings": findings
-
-    }
+    return {"score": score, "risk_level": risk_level, "findings": findings}

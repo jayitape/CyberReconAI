@@ -12,19 +12,15 @@ Features:
 - Website connectivity check
 """
 
-
+import socket
 from typing import Dict
 from urllib.parse import urlparse
-
-import socket
 
 import requests
 
 from modules.logger import setup_logger
 
-
 logger = setup_logger()
-
 
 
 def normalize_url(url: str) -> str:
@@ -38,14 +34,10 @@ def normalize_url(url: str) -> str:
         str: Normalized URL.
     """
 
-    if not url.startswith(
-        ("http://", "https://")
-    ):
+    if not url.startswith(("http://", "https://")):
         url = "https://" + url
 
-
     return url
-
 
 
 def validate_url(url: str) -> bool:
@@ -63,23 +55,16 @@ def validate_url(url: str) -> bool:
 
         parsed_url = urlparse(url)
 
-
         if parsed_url.netloc:
             return True
 
-
         return False
-
 
     except Exception as error:
 
-        logger.error(
-            "URL validation failed: %s",
-            error
-        )
+        logger.error("URL validation failed: %s", error)
 
         return False
-
 
 
 def extract_domain(url: str) -> str:
@@ -95,9 +80,7 @@ def extract_domain(url: str) -> str:
 
     parsed_url = urlparse(url)
 
-
     return parsed_url.netloc
-
 
 
 def resolve_ip(domain: str) -> str:
@@ -113,33 +96,17 @@ def resolve_ip(domain: str) -> str:
 
     try:
 
-        ip_address = socket.gethostbyname(
-            domain
-        )
+        ip_address = socket.gethostbyname(domain)
 
-
-        logger.info(
-            "IP resolved for %s : %s",
-            domain,
-            ip_address
-        )
-
+        logger.info("IP resolved for %s : %s", domain, ip_address)
 
         return ip_address
 
-
-
     except socket.gaierror:
 
-
-        logger.warning(
-            "Unable to resolve IP for %s",
-            domain
-        )
-
+        logger.warning("Unable to resolve IP for %s", domain)
 
         return "Unknown"
-
 
 
 def check_connectivity(url: str) -> bool:
@@ -155,75 +122,31 @@ def check_connectivity(url: str) -> bool:
 
     try:
 
-        headers = {
+        headers = {"User-Agent": "Mozilla/5.0 CyberReconAI Security Assessment"}
 
-            "User-Agent":
-            "Mozilla/5.0 CyberReconAI Security Assessment"
+        response = requests.get(url, headers=headers, timeout=10, allow_redirects=True)
 
-        }
-
-
-        response = requests.get(
-
-            url,
-
-            headers=headers,
-
-            timeout=10,
-
-            allow_redirects=True
-
-        )
-
-
-        logger.info(
-            "Target reachable: %s | Status Code: %s",
-            url,
-            response.status_code
-        )
-
+        logger.info("Target reachable: %s | Status Code: %s", url, response.status_code)
 
         return True
 
-
-
     except requests.exceptions.Timeout:
 
-
-        logger.warning(
-            "Connection timeout: %s",
-            url
-        )
-
+        logger.warning("Connection timeout: %s", url)
 
         return False
-
-
 
     except requests.exceptions.ConnectionError:
 
-
-        logger.warning(
-            "Connection failed: %s",
-            url
-        )
-
+        logger.warning("Connection failed: %s", url)
 
         return False
-
-
 
     except requests.RequestException as error:
 
-
-        logger.error(
-            "Request error: %s",
-            error
-        )
-
+        logger.error("Request error: %s", error)
 
         return False
-
 
 
 def analyze_target(url: str) -> Dict[str, str]:
@@ -237,72 +160,28 @@ def analyze_target(url: str) -> Dict[str, str]:
         Dict[str, str]: Target information.
     """
 
-    logger.info(
-        "Starting target analysis"
-    )
+    logger.info("Starting target analysis")
 
+    normalized_url = normalize_url(url)
 
-    normalized_url = normalize_url(
-        url
-    )
+    if not validate_url(normalized_url):
 
+        raise ValueError("Invalid URL provided")
 
-    if not validate_url(
-        normalized_url
-    ):
+    domain = extract_domain(normalized_url)
 
-        raise ValueError(
-            "Invalid URL provided"
-        )
+    ip_address = resolve_ip(domain)
 
-
-
-    domain = extract_domain(
-        normalized_url
-    )
-
-
-    ip_address = resolve_ip(
-        domain
-    )
-
-
-    reachable = check_connectivity(
-        normalized_url
-    )
-
-
+    reachable = check_connectivity(normalized_url)
 
     target_info = {
-
-        "url":
-        normalized_url,
-
-
-        "domain":
-        domain,
-
-
-        "ip":
-        ip_address,
-
-
-        "scheme":
-        urlparse(
-            normalized_url
-        ).scheme,
-
-
-        "reachable":
-        str(reachable)
-
+        "url": normalized_url,
+        "domain": domain,
+        "ip": ip_address,
+        "scheme": urlparse(normalized_url).scheme,
+        "reachable": str(reachable),
     }
 
-
-
-    logger.info(
-        "Target analysis completed"
-    )
-
+    logger.info("Target analysis completed")
 
     return target_info

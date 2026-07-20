@@ -19,12 +19,6 @@ def parse_arguments():
         description="CyberRecon AI - Website Security Assessment Toolkit"
     )
 
-
-    parser.add_argument(
-        "--url",
-        required=True,
-        help="Target website URL"
-    )
-
+    parser.add_argument("--url", required=True, help="Target website URL")
 
     return parser.parse_args()

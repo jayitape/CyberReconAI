@@ -3,9 +3,8 @@ CyberRecon AI
 Professional Rich Theme
 """
 
-from rich.theme import Theme
 from rich.console import Console
-
+from rich.theme import Theme
 
 CYBER_THEME = Theme(
     {
@@ -24,12 +23,9 @@ CYBER_THEME = Theme(
         "risk_medium": "yellow",
         "risk_high": "red",
         "risk_critical": "bold red",
-        "footer": "bright_black"
+        "footer": "bright_black",
     }
 )
 
 
-console = Console(
-    theme=CYBER_THEME,
-    soft_wrap=True
-)
+console = Console(theme=CYBER_THEME, soft_wrap=True)

@@ -9,7 +9,6 @@ Author: CyberRecon AI
 
 from typing import Dict, List
 
-
 # Common TCP services
 COMMON_SERVICES = {
     20: "FTP-DATA",
@@ -51,18 +50,27 @@ def detect_services(open_ports: List[Dict]) -> List[Dict]:
     """
 
     detected = []
-
+    
     for port_info in open_ports:
 
         port = port_info.get("port")
 
-        service = COMMON_SERVICES.get(port, "Unknown")
+        if not isinstance(port, int):
+            continue
+
+        service = COMMON_SERVICES.get(
+            port,
+            "Unknown",
+        )
 
         detected.append(
             {
                 "port": port,
                 "service": service,
-                "state": port_info.get("state", "OPEN"),
+                "state": port_info.get(
+                    "state",
+                    "OPEN",
+                ),
             }
         )
 

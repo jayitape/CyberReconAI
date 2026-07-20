@@ -6,29 +6,17 @@ Main Application Entry Point
 Authorized Defensive Security Assessment Toolkit
 """
 
-
 import sys
 
-
 from modules.banner import show_banner
-
-from modules.logger import setup_logger
-
 from modules.cli import parse_arguments
-
-from modules.target import analyze_target
-
-from modules.whois_lookup import get_whois_info
-
 from modules.dns_lookup import get_dns_records
-
-from modules.ssl_checker import get_ssl_info
-
 from modules.http_headers import get_security_headers
-
+from modules.logger import setup_logger
+from modules.ssl_checker import get_ssl_info
+from modules.target import analyze_target
 from modules.technology_detector import TechnologyDetector
-
-
+from modules.whois_lookup import get_whois_info
 
 
 def main():
@@ -36,14 +24,11 @@ def main():
     Execute complete CyberRecon AI workflow.
     """
 
-
     # ==============================
     # Banner
     # ==============================
 
     show_banner()
-
-
 
     # ==============================
     # Logger
@@ -51,12 +36,7 @@ def main():
 
     logger = setup_logger()
 
-
-    logger.info(
-        "CyberRecon AI started"
-    )
-
-
+    logger.info("CyberRecon AI started")
 
     # ==============================
     # CLI Input
@@ -66,227 +46,117 @@ def main():
 
     target_url = args.url
 
-
-
-    print(
-        f"\n[+] Target : {target_url}"
-    )
-
-
+    print(f"\n[+] Target : {target_url}")
 
     try:
-
 
         # ==============================
         # Target Intelligence
         # ==============================
 
-        print(
-            "\n========== TARGET INFORMATION =========="
-        )
+        print("\n========== TARGET INFORMATION ==========")
 
-
-        target_info = analyze_target(
-            target_url
-        )
-
+        target_info = analyze_target(target_url)
 
         for key, value in target_info.items():
 
-            print(
-                f"{key}: {value}"
-            )
-
+            print(f"{key}: {value}")
 
         domain = target_info["domain"]
 
         normalized_url = target_info["url"]
 
-
-
-
         # ==============================
         # WHOIS
         # ==============================
 
-        print(
-            "\n========== WHOIS INFORMATION =========="
-        )
+        print("\n========== WHOIS INFORMATION ==========")
 
-
-        whois_info = get_whois_info(
-            domain
-        )
-
+        whois_info = get_whois_info(domain)
 
         for key, value in whois_info.items():
 
-            print(
-                f"{key}: {value}"
-            )
-
-
-
+            print(f"{key}: {value}")
 
         # ==============================
         # DNS Enumeration
         # ==============================
 
-        print(
-            "\n========== DNS ENUMERATION =========="
-        )
+        print("\n========== DNS ENUMERATION ==========")
 
-
-        dns_info = get_dns_records(
-            domain
-        )
-
+        dns_info = get_dns_records(domain)
 
         for record, values in dns_info.items():
 
-            print(
-                f"{record}: {values}"
-            )
-
-
-
+            print(f"{record}: {values}")
 
         # ==============================
         # SSL/TLS Analysis
         # ==============================
 
-        print(
-            "\n========== SSL/TLS ANALYSIS =========="
-        )
+        print("\n========== SSL/TLS ANALYSIS ==========")
 
-
-        ssl_info = get_ssl_info(
-            domain
-        )
-
+        ssl_info = get_ssl_info(domain)
 
         for key, value in ssl_info.items():
 
-            print(
-                f"{key}: {value}"
-            )
-
-
-
+            print(f"{key}: {value}")
 
         # ==============================
         # HTTP Security Headers
         # ==============================
 
-        print(
-            "\n========== HTTP SECURITY HEADERS =========="
-        )
+        print("\n========== HTTP SECURITY HEADERS ==========")
 
-
-        header_info = get_security_headers(
-            normalized_url
-        )
-
+        header_info = get_security_headers(normalized_url)
 
         for key, value in header_info.items():
 
-            print(
-                f"{key}: {value}"
-            )
-
-
-
+            print(f"{key}: {value}")
 
         # ==============================
         # Technology Detection
         # ==============================
 
-        print(
-            "\n========== TECHNOLOGY DETECTION =========="
-        )
+        print("\n========== TECHNOLOGY DETECTION ==========")
 
-
-        detector = TechnologyDetector(
-            normalized_url
-        )
-
+        detector = TechnologyDetector(normalized_url)
 
         technology_info = detector.analyze()
 
-
-
-        print(
-            "\nWeb Server:"
-        )
+        print("\nWeb Server:")
 
         for item in technology_info["server"]:
 
-            print(
-                f"- {item}"
-            )
+            print(f"- {item}")
 
-
-
-        print(
-            "\nCMS:"
-        )
+        print("\nCMS:")
 
         for item in technology_info["cms"]:
 
-            print(
-                f"- {item}"
-            )
+            print(f"- {item}")
 
-
-
-        print(
-            "\nFrameworks:"
-        )
+        print("\nFrameworks:")
 
         for item in technology_info["frameworks"]:
 
-            print(
-                f"- {item}"
-            )
+            print(f"- {item}")
 
-
-
-        print(
-            "\nJavaScript Libraries:"
-        )
+        print("\nJavaScript Libraries:")
 
         for item in technology_info["javascript"]:
 
-            print(
-                f"- {item}"
-            )
+            print(f"- {item}")
 
-
-
-        logger.info(
-            "CyberRecon AI scan completed successfully"
-        )
-
-
+        logger.info("CyberRecon AI scan completed successfully")
 
     except Exception as error:
 
+        logger.exception("Scan failed: %s", error)
 
-        logger.exception(
-            "Scan failed: %s",
-            error
-        )
-
-
-        print(
-            "\n[!] Scan failed. Check logs."
-        )
-
+        print("\n[!] Scan failed. Check logs.")
 
         sys.exit(1)
-
-
-
 
 
 if __name__ == "__main__":

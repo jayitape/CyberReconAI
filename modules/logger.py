@@ -4,9 +4,8 @@ CyberRecon AI Logger Module
 This module configures application-wide logging.
 """
 
-from pathlib import Path
 import logging
-
+from pathlib import Path
 
 # Create output directory if it does not exist
 OUTPUT_DIR = Path("output")
@@ -32,9 +31,7 @@ def setup_logger() -> logging.Logger:
 
     logger.setLevel(logging.INFO)
 
-    formatter = logging.Formatter(
-        "%(asctime)s | %(levelname)s | %(message)s"
-    )
+    formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(message)s")
 
     file_handler = logging.FileHandler(LOG_FILE, encoding="utf-8")
     file_handler.setFormatter(formatter)
