@@ -153,7 +153,7 @@ CyberRecon AI is designed to:
 - Professional logging system
 - Intelligent caching mechanism
 - Strong type safety (100% mypy clean)
-- - Professional HTML, JSON & PDF reports
+- Professional HTML, JSON & PDF reports
 - Easy to extend with future intelligence modules
 - Clean and maintainable Python code
 - Production-ready project structure
