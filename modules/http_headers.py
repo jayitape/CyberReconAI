@@ -67,7 +67,10 @@ class SecurityHeaderAnalyzer:
 
             logger.info("HTTP headers collected successfully")
 
-            self.headers = dict(response.headers)
+            self.headers = {
+                key.lower(): value
+                for key, value in response.headers.items()
+                }
 
             return self.headers
 
@@ -90,16 +93,27 @@ class SecurityHeaderAnalyzer:
         missing_headers: List[str] = []
 
         for header, description in self.SECURITY_HEADERS.items():
-
-            if header in self.headers:
-
-                present_headers[description] = True
-
+            
+            header_name = header.lower()
+            # CSP OR CSP Report Only
+            if header_name == "content-security-policy":
+                if (
+            "content-security-policy" in self.headers
+            or
+            "content-security-policy-report-only" in self.headers
+        ):
+                    present_headers[description] = True
+                else:
+                    present_headers[description] = False
+                    missing_headers.append(header)
+                    
             else:
-
-                present_headers[description] = False
-
-                missing_headers.append(header)
+                if header_name in self.headers:
+                    present_headers[description] = True
+                    
+                else:
+                    present_headers[description] = False
+                    missing_headers.append(header)
 
         total_headers = len(self.SECURITY_HEADERS)
 
@@ -108,11 +122,18 @@ class SecurityHeaderAnalyzer:
         score = f"{secure_headers}/{total_headers}"
 
         self.result = {
-            "server": self.headers.get("Server", "Unknown"),
+            "server": self.headers.get("server", "Unknown"),
             "security_headers": present_headers,
             "missing_headers": missing_headers,
             "score": score,
         }
+
+        self.headers = {
+             key.lower(): value
+             for key, value in response.headers.items()
+             }
+        
+        return self.headers
 
         logger.info("Security header analysis completed")
 

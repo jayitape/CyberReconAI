@@ -8,7 +8,6 @@ Reusable UI components for CyberRecon AI
 
 from datetime import datetime
 from typing import Any, Dict, List
-
 from rich.align import Align
 from rich.console import Console
 from rich.panel import Panel
@@ -24,6 +23,8 @@ from rich.table import Table
 from rich.text import Text
 from pyfiglet import Figlet
 from rich import box
+import platform
+import sys
 
 console = Console()
 
@@ -92,8 +93,14 @@ def show_banner():
     )
     subtitle.append("Enterprise Edition\n\n", style="bold red")
     subtitle.append("Version : v1.0.20\n", style="bright_white")
-    subtitle.append("Python  : 3.12+\n", style="bright_white")
-    subtitle.append("Platform: Windows\n", style="bright_white")
+    subtitle.append(
+        f"Python  : {sys.version_info.major}.{sys.version_info.minor}\n",
+        style="bright_white",
+        )
+    subtitle.append(
+        f"Platform: {platform.system()}\n",
+        style="bright_white",
+        )
     subtitle.append("Developed by JAY ITAPE", style="bold yellow")
 
     console.print(

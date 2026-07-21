@@ -38,21 +38,25 @@ def get_certificate(domain: str) -> Dict[str, Any]:
 
         context = ssl.create_default_context()
 
-        with socket.create_connection((domain, 443), timeout=5) as connection:
+        with socket.create_connection((domain, 443), timeout=15) as connection:
 
             with context.wrap_socket(connection, server_hostname=domain) as ssl_socket:
 
                 certificate = ssl_socket.getpeercert()
+
+                tls_version = ssl_socket.version()
+
+                cipher = ssl_socket.cipher()
+                
+                cipher_suite = cipher[0] if cipher else "Unknown"
                 
                 if not certificate:
-                      
-                      logger.warning(
+                    logger.warning(
                         
                         "No SSL certificate data received for %s",
                         domain,
                         )
-                        
-                return {}
+                    return {}
                 
                 
                 subject: tuple[Any, ...] = certificate.get(
@@ -61,11 +65,38 @@ def get_certificate(domain: str) -> Dict[str, Any]:
                      
                      )
                 
+                subject_name = "Unknown"
+                
+                for group in subject:
+                    for attribute in group:
+                        key, value = attribute
+                        if key == "commonName":
+                            subject_name = value
+                            
+                            break
+
                 issuer: tuple[Any, ...] = certificate.get(
                      "issuer",
                      (),
                      )
                      
+                issuer_org = "Unknown"
+                
+                issuer_cn = ""
+                for group in issuer:
+                    for attribute in group:
+                         key, value = attribute
+                         
+                         if key == "organizationName":
+                            issuer_org = value
+                         elif key == "commonName":
+                            issuer_cn = value
+                            
+                issuer_name = issuer_org
+                if issuer_cn:
+                    
+                    issuer_name = f"{issuer_org} ({issuer_cn})"
+
                 valid_from: str = str(
                           certificate.get(
                                "notBefore",
@@ -93,16 +124,17 @@ def get_certificate(domain: str) -> Dict[str, Any]:
             days_remaining = (
                 expiry_date - current_date
                 ).days
-
-        
+            
         certificate_info = {
-            "subject": subject,
-            "issuer": issuer,
-            "valid_from": valid_from,
-            "valid_until": valid_until,
-            "days_remaining": days_remaining,
-        }
-
+                "subject": subject_name,
+                "issuer": issuer_name,
+                "valid_from": valid_from,
+                "valid_until": valid_until,
+                "days_remaining": days_remaining,
+                "tls_version": tls_version,
+                "cipher_suite": cipher_suite,
+                }
+            
         logger.info("SSL certificate analysis completed for %s", domain)
 
     except ssl.SSLError as error:
