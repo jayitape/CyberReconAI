@@ -92,7 +92,7 @@ def show_banner():
         style="white",
     )
     subtitle.append("Enterprise Edition\n\n", style="bold red")
-    subtitle.append("Version : v1.0.20\n", style="bright_white")
+    subtitle.append("Version : v1.0.21\n", style="bright_white")
     subtitle.append(
         f"Python  : {sys.version_info.major}.{sys.version_info.minor}\n",
         style="bright_white",
@@ -227,9 +227,6 @@ def show_dns_info(dns_info: dict[str, object]) -> None:
 def show_http_headers(headers_info: dict[str, object]) -> None:
     """
     Display HTTP security header analysis using Rich table.
-
-    Args:
-        headers_info: Dictionary containing HTTP security header results.
     """
 
     from rich.table import Table
@@ -241,17 +238,68 @@ def show_http_headers(headers_info: dict[str, object]) -> None:
         expand=True,
     )
 
-    table.add_column("Header", style="bold green", width=30)
-    table.add_column("Value", style="white")
+    table.add_column("Security Header", style="bold cyan", width=35)
+    table.add_column("Status", justify="center", width=20)
+    table.add_column("Risk", justify="center", width=15)
 
-    for key, value in headers_info.items():
-        table.add_row(
-            str(key).replace("_", " ").title(),
-            str(value),
+    table.add_row(
+        "Server",
+        str(headers_info.get("server", "Unknown")),
+    )
+
+    security_headers: dict[str, bool] = {}
+    raw_headers = headers_info.get(
+        "security_headers",
+        {},
         )
+    
+    if isinstance(raw_headers, dict):
+        security_headers = {
+            str(key): bool(value)
+            
+            for key, value in raw_headers.items()
+            }
+            
+    for header, enabled in security_headers.items():
+        if enabled:
+            status = "[bold green]✓ Present[/bold green]"
+            risk = "[green]Secure[/green]"
+        else:
+            status = "[bold red]✗ Missing[/bold red]"
+            risk = "[yellow]Low Risk[/yellow]"
+            
+        table.add_row(
+            header,
+            status,
+            risk,
+            )
+        
+    missing_headers: list[str] = []
+
+    raw_missing = headers_info.get(
+        "missing_headers",
+        [],
+        )
+        
+    if isinstance(raw_missing, list):
+        missing = [
+            str(item)
+            for item in raw_missing
+            ]
+
+    table.add_row(
+        "Missing Headers",
+        ", ".join(missing)
+        if missing
+        else "None",
+    )
+
+    table.add_row(
+        "Score",
+        str(headers_info.get("score", "0/0")),
+    )
 
     console.print(table)
-
 # =========================================
 #   Technology info
 # ==========================================
@@ -1058,3 +1106,18 @@ def show_ssl_info(ssl_info: Dict[str, Any]) -> None:
     console.print(table)
 
     show_footer()
+
+def create_progress():
+    """
+    Create enterprise scan progress bar.
+    """
+
+    progress = Progress(
+        SpinnerColumn(),
+        TextColumn("[bold cyan]{task.description}"),
+        BarColumn(),
+        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+        TimeElapsedColumn(),
+    )
+
+    return progress

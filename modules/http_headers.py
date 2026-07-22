@@ -24,16 +24,7 @@ class SecurityHeaderAnalyzer:
     """
     Performs HTTP security header analysis.
     """
-
-    SECURITY_HEADERS = {
-        "Strict-Transport-Security": "HSTS",
-        "Content-Security-Policy": "CSP",
-        "X-Frame-Options": "Clickjacking Protection",
-        "X-Content-Type-Options": "MIME Sniffing Protection",
-        "Referrer-Policy": "Referrer Protection",
-        "Permissions-Policy": "Browser Permissions Control",
-    }
-
+        
     def __init__(self, url: str):
         """
         Initialize analyzer.
@@ -55,29 +46,53 @@ class SecurityHeaderAnalyzer:
         Returns:
             Dict[str, str]: Response headers.
         """
-
+        
         try:
-
             response = requests.get(
                 self.url,
                 timeout=20,
                 allow_redirects=True,
-                headers={"User-Agent": "Mozilla/5.0 CyberReconAI"},
-            )
-
-            logger.info("HTTP headers collected successfully")
-
+                headers={
+                    "User-Agent": "Mozilla/5.0 CyberReconAI"
+                    },
+                verify=True,
+                )
+            
             self.headers = {
-                key.lower(): value
-                for key, value in response.headers.items()
-                }
-
+                 key.lower(): value
+                 for key, value in response.headers.items()
+                 }
+            
+            
             return self.headers
-
-        except requests.RequestException as error:
-
-            logger.error("Header collection failed: %s", error)
-
+            
+        except requests.exceptions.SSLError:
+            logger.warning(
+                "SSL verification failed, retrying without verification"
+                )
+            
+            response = requests.get(
+                self.url,
+                timeout=20,
+                allow_redirects=True,
+                headers={
+                    "User-Agent": "Mozilla/5.0 CyberReconAI"
+                    },
+                    verify=False,
+                    )
+            self.headers = {
+                 key.lower(): value
+                 for key, value in response.headers.items()
+                 }
+        
+            
+            return self.headers
+            
+        except requests.exceptions.RequestException as error:
+            logger.error(
+                f"Header collection failed: {error}"
+                )
+            
             return {}
 
     def analyze_headers(self) -> Dict[str, Any]:
@@ -87,35 +102,39 @@ class SecurityHeaderAnalyzer:
         Returns:
             Dict[str, Any]: Security analysis result.
         """
+        
+        security_headers = {
+            "strict-transport-security": "HTTP Strict Transport Security (HSTS)",
+            "content-security-policy": "Content Security Policy (CSP)",
+            "x-frame-options": "X-Frame-Options",
+            "x-content-type-options": "X-Content-Type-Options",
+            "referrer-policy": "Referrer-Policy",
+            "permissions-policy": "Permissions-Policy",
+            }
 
         present_headers = {}
 
         missing_headers: List[str] = []
 
-        for header, description in self.SECURITY_HEADERS.items():
-            
+        for header, description in security_headers.items():
             header_name = header.lower()
-            # CSP OR CSP Report Only
-            if header_name == "content-security-policy":
-                if (
-            "content-security-policy" in self.headers
-            or
-            "content-security-policy-report-only" in self.headers
-        ):
-                    present_headers[description] = True
-                else:
-                    present_headers[description] = False
-                    missing_headers.append(header)
-                    
+            
+            if header_name in self.headers:
+                
+                present_headers[description] = True
+            
+            elif (
+                header_name == "content-security-policy"
+                and "content-security-policy-report-only" in self.headers
+                ):
+                
+                present_headers[description] = True
+                
             else:
-                if header_name in self.headers:
-                    present_headers[description] = True
-                    
-                else:
-                    present_headers[description] = False
-                    missing_headers.append(header)
+                present_headers[description] = False
+                missing_headers.append(header)
 
-        total_headers = len(self.SECURITY_HEADERS)
+        total_headers = len(security_headers)
 
         secure_headers = total_headers - len(missing_headers)
 
@@ -128,12 +147,6 @@ class SecurityHeaderAnalyzer:
             "score": score,
         }
 
-        self.headers = {
-             key.lower(): value
-             for key, value in response.headers.items()
-             }
-        
-        return self.headers
 
         logger.info("Security header analysis completed")
 

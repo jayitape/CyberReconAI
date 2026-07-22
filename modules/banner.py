@@ -7,12 +7,10 @@ from rich.align import Align
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
-import platform
+from modules.version import VERSION, EDITION
+
 
 console = Console()
-
-
-VERSION = "1.0.17"
 
 
 def show_banner():
@@ -55,6 +53,8 @@ def show_banner():
     text.append("────────────────────────────────────────────\n", style="cyan")
 
     text.append(f"Version : {VERSION}\n", style="bold yellow")
+
+    text.append(f"Edition : {EDITION}\n", style="bold cyan")
 
     text.append("Authorized Security Testing Only\n", style="bold red")
 

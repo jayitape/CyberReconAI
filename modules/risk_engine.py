@@ -14,6 +14,8 @@ import logging
 logger = logging.getLogger("CyberReconAI")
 
 
+
+
 def calculate_security_score(
     headers=None, ssl_info=None, robots_info=None, ports=None, subdomains=None
 ):
@@ -29,16 +31,30 @@ def calculate_security_score(
     # ==========================
 
     if headers:
-
         missing = headers.get("missing_headers", [])
-
+        
+        header_risk = {
+        "strict-transport-security": ("HIGH", 10),
+        "content-security-policy": ("HIGH", 10),
+        "x-frame-options": ("MEDIUM", 7),
+        "x-content-type-options": ("LOW", 3),
+        "referrer-policy": ("LOW", 3),
+        "permissions-policy": ("LOW", 2),
+        }
+        
         for header in missing:
-
-            score -= 5
-
+            score -= 5  # Default deduction for missing headers
+            
+            risk, deduction = header_risk.get(header, ("LOW", 3))
+            
+            score -= deduction
+            
             findings.append(
-                {"risk": "LOW", "issue": f"Missing security header: {header}"}
-            )
+            {
+                "risk": risk,
+                "issue": f"Missing {header} header",
+            }
+        )
 
     # ==========================
     # SSL Certificate
@@ -47,20 +63,57 @@ def calculate_security_score(
     if ssl_info:
 
         days = ssl_info.get("days_remaining", 0)
-
-        if days < 30:
-
-            score -= 15
-
-            findings.append({"risk": "HIGH", "issue": "SSL certificate expires soon"})
-
-        elif days < 90:
-
-            score -= 5
-
-            findings.append(
-                {"risk": "LOW", "issue": "SSL certificate expiry within 90 days"}
+        
+        status = ssl_info.get(
+            "certificate_status",
+            ""
             )
+        
+        if status == "EXPIRED":
+            
+            score -= 25
+            
+            findings.append(
+                {
+                    "risk":"CRITICAL",
+                    "issue":"SSL certificate expired"
+                    }
+                )
+
+        status = ssl_info.get(
+            "certificate_status",
+            "UNKNOWN"
+            )
+        
+        if status == "EXPIRED":
+            score -= 25
+            
+            findings.append(
+                {
+                    "risk": "CRITICAL",
+                    "issue": "SSL certificate expired",
+                    }
+                    )
+            
+        elif status == "CRITICAL":
+            score -= 15
+            
+            findings.append(
+                {
+                    "risk": "HIGH",
+                    "issue": "SSL certificate expires within 30 days",
+                    }
+                    )
+            
+        elif status == "WARNING":
+            score -= 5
+            
+            findings.append(
+                {
+                    "risk": "LOW",
+                    "issue": "SSL certificate expiry within 90 days",
+                    }
+                    )
 
     # ==========================
     # Robots.txt Analysis

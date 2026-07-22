@@ -3,7 +3,7 @@ CyberRecon AI
 Enterprise PDF Report Generator
 
 Version:
-v1.0.20
+v1.1.0
 
 Converts HTML security reports into
 professional PDF reports using Playwright Chromium.
@@ -25,30 +25,20 @@ logger = setup_logger()
 PDF_FORMAT: Final[str] = "A4"
 
 
+
 def generate_pdf_report(
     html_path: str,
     pdf_path: str,
 ) -> str:
     """
-    Generate PDF report from HTML report.
-
-    Args:
-        html_path:
-            Path of generated HTML report.
-
-        pdf_path:
-            Output PDF file path.
-
-    Returns:
-        Generated PDF path.
-
-    Raises:
-        FileNotFoundError:
-            If HTML report does not exist.
+    Generate enterprise PDF report from HTML report.
     """
 
+
     html_file = Path(html_path)
+
     output_file = Path(pdf_path)
+
 
 
     if not html_file.exists():
@@ -63,59 +53,115 @@ def generate_pdf_report(
         )
 
 
+
     try:
+
 
         logger.info(
             "Starting PDF generation..."
         )
 
 
+
+        output_file.parent.mkdir(
+            parents=True,
+            exist_ok=True
+        )
+
+
+
         with sync_playwright() as playwright:
+
+
 
             browser = playwright.chromium.launch(
                 headless=True
             )
 
 
-            page = browser.new_page()
+
+            page = browser.new_page(
+                viewport={
+                    "width":1280,
+                    "height":1800,
+                }
+            )
+
 
 
             page.goto(
                 html_file.resolve().as_uri(),
-                wait_until="networkidle",
+                wait_until="load",
             )
+
+
+
+            # wait for rendering
+
+            page.wait_for_timeout(
+                3000
+            )
+
+
+
+            # force print rendering
+
+            page.emulate_media(
+                media="print"
+            )
+
 
 
             page.pdf(
+
                 path=str(output_file),
+
                 format=PDF_FORMAT,
+
                 print_background=True,
+
+                prefer_css_page_size=True,
+
                 margin={
-                    "top": "20px",
-                    "bottom": "20px",
-                    "left": "20px",
-                    "right": "20px",
+
+                    "top":"15mm",
+
+                    "bottom":"15mm",
+
+                    "left":"15mm",
+
+                    "right":"15mm",
+
                 },
+
             )
+
 
 
             browser.close()
 
 
+
+
         logger.info(
             "PDF generated successfully: %s",
-            pdf_path,
+            output_file,
         )
+
 
 
         return str(output_file)
 
 
+
+
     except Exception as exc:
+
 
         logger.exception(
             "PDF generation failed: %s",
             exc,
         )
+
 
         raise

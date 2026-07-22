@@ -12,6 +12,7 @@ Authorized security assessments only.
 import json
 import socket
 from typing import Dict, List
+from concurrent.futures import ThreadPoolExecutor
 
 import requests
 
@@ -55,7 +56,16 @@ class SubdomainEnumerator:
 
             url = f"https://crt.sh/?q=%25.{self.domain}" "&output=json"
 
-            response = requests.get(url, timeout=20)
+            response = requests.get(
+                url,
+                timeout=10,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                        "AppleWebKit/537.36 Chrome/138.0 Safari/537.36"
+                        ),
+                        },
+                        )
 
             response.raise_for_status()
 
@@ -66,30 +76,89 @@ class SubdomainEnumerator:
                 names = certificate.get("name_value", "")
 
                 for name in names.split("\n"):
-
                     name = name.strip()
-
+                    
+                    if not name:
+                        continue
+                    # Skip email addresses
+                    
+                    if "@" in name:
+                        logger.debug("Skipping email entry: %s", name)
+                        continue
+                    
                     if name.startswith("*."):
-
                         name = name[2:]
-
+                        
+                        
                     if name.endswith(self.domain) and name not in discovered:
-
                         discovered.append(name)
 
             logger.info("Certificate transparency lookup completed")
 
         except requests.RequestException as error:
 
-            logger.error("crt.sh request failed: %s", error)
+            logger.warning("crt.sh request failed: %s", error)
 
         except json.JSONDecodeError:
 
-            logger.error("Invalid JSON response from crt.sh")
+            logger.warning("Invalid JSON response from crt.sh")
 
         except Exception as error:
 
             logger.exception("Subdomain discovery error: %s", error)
+
+        return discovered
+
+    def fetch_alienvault(self) -> List[str]:
+        """
+        Fetch subdomains from AlienVault OTX.
+        """
+        discovered: List[str] = []
+        try:
+            url = (
+                f"https://otx.alienvault.com/api/v1/"
+                f"indicators/domain/{self.domain}/passive_dns"
+                )
+                
+            response = requests.get(
+                url,
+                timeout=10,
+                headers={
+                    "User-Agent": (
+                        "Mozilla/5.0 "
+                        "(Windows NT 10.0; Win64; x64)"
+                        )
+                        },
+                        )
+            
+            response.raise_for_status()
+            
+            data = response.json()
+            
+            for record in data.get("passive_dns", []):
+                
+                hostname = record.get("hostname", "").strip()
+                
+                if (
+                    hostname.endswith(self.domain)
+                    and hostname not in discovered
+                    ):
+                    
+                    discovered.append(hostname)
+                    
+                    logger.info("AlienVault lookup completed")
+                    
+        except requests.RequestException as error:
+            
+            logger.warning("AlienVault request failed: %s", error)
+            
+        except json.JSONDecodeError:
+            
+            logger.warning("AlienVault returned invalid JSON")
+
+        except Exception as error:
+            
+            logger.exception("AlienVault lookup error: %s", error)
 
         return discovered
 
@@ -118,7 +187,7 @@ class SubdomainEnumerator:
 
         except Exception as error:
 
-            logger.error("DNS resolution error %s: %s", subdomain, error)
+            logger.warning("DNS resolution error %s: %s", subdomain, error)
 
             return "Unknown"
 
@@ -160,7 +229,14 @@ class SubdomainEnumerator:
 
         logger.info("Starting subdomain enumeration for %s", self.domain)
 
-        self.subdomains = self.fetch_certificate_logs()
+        crt_results = self.fetch_certificate_logs()
+        
+        otx_results = self.fetch_alienvault()
+        
+        self.subdomains = sorted(
+            
+            set(crt_results + otx_results)
+            )
 
         self.active_subdomains = self.validate_subdomains(self.subdomains)
 
