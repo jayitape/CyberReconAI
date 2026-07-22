@@ -5,7 +5,7 @@ Version Information
 
 PROJECT_NAME = "CyberRecon AI"
 
-VERSION = "1.0.21"
+VERSION = "1.1.0"
 
 EDITION = "Enterprise Edition"
 
