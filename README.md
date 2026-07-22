@@ -226,18 +226,34 @@ Professional Report Generation
 
 # 📸 Project Preview
 
-> Screenshots will be added in the next release.
+<p align="center">
+  <img src="assets/banner.png" alt="CyberRecon AI Banner" width="100%">
+</p>
 
-```text
-assets/
-├── banner.png
-├── dashboard.png
-├── ssl.png
-├── headers.png
-├── vulnerability.png
-├── report.png
-└── summary.png
-```
+---
+
+## 🖥️ Enterprise Terminal Dashboard
+
+<p align="center">
+  <img src="assets/terminal-dashboard.png" alt="CyberRecon AI Terminal Dashboard" width="100%">
+</p>
+
+---
+## 🛡️ Security Risk Assessment
+
+<p align="center">
+  <img src="assets/risk-engine.png" alt="CyberRecon AI Risk Engine" width="100%">
+</p>
+
+---
+## 📑 Professional Reports
+
+<p align="center">
+  <img src="assets/html-report.png" alt="HTML Report" width="48%">
+  <img src="assets/pdf-report.png" alt="PDF Report" width="48%">
+</p>
+
+---
 
 ---
 
