@@ -1,7 +1,7 @@
 """
 CyberRecon AI
 Professional JSON Report Generator
-Version: 1.0.16
+Version: 1.1.0
 """
 
 import json
@@ -21,7 +21,7 @@ def generate_json_report(scan_data, filename):
     json_report = {
         "cyberrecon_ai": {
             "tool_name": "CyberRecon AI",
-            "version": "1.0.16",
+            "version": "1.1.0",
             "generated_by": "CyberRecon AI - Authorized Defensive Security Assessment Toolkit",
             "scan_information": {
                 "timestamp": datetime.utcnow().isoformat(),

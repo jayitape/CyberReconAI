@@ -2,7 +2,7 @@
 CyberRecon AI
 Risk Scoring Engine Module
 
-Version: 1.0.15
+Version: 1.1.0
 
 Purpose:
 Generate overall security risk score

@@ -2,7 +2,7 @@
 CyberRecon AI
 Robots.txt Analyzer Module
 
-Version: 1.0.14
+Version: 1.1.0
 Purpose:
 Authorized Defensive Security Assessment Toolkit
 """

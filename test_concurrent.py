@@ -2,7 +2,7 @@
 CyberRecon AI
 Concurrent Scanner Test
 
-Version: v1.0.20
+Version: v1.1.0
 """
 
 from time import sleep

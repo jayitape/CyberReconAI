@@ -3,7 +3,7 @@ CyberRecon AI
 
 Scan Duration Timer Module
 
-Version: 1.0.16
+Version: 1.1.0
 """
 
 from datetime import datetime

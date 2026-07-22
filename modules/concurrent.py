@@ -7,7 +7,7 @@ Runs independent scan modules simultaneously
 to improve scan performance.
 
 Version:
-v1.0.21
+v1.1.0
 """
 
 from concurrent.futures import ThreadPoolExecutor

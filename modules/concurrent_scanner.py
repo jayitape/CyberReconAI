@@ -2,7 +2,7 @@
 CyberRecon AI
 Concurrent Scan Engine
 
-Version: v1.0.20
+Version: v1.1.0
 """
 
 from __future__ import annotations

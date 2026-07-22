@@ -2,7 +2,7 @@
 CyberRecon AI
 Scan ID Generator Module
 
-Version: 1.0.16
+Version: 1.1.0
 """
 
 from datetime import datetime

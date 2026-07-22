@@ -6,7 +6,7 @@ Provides JSON-based caching for external intelligence
 sources such as NVD, EPSS, CISA KEV and ExploitDB.
 
 Version:
-v1.0.20
+v1.1.0
 """
 
 from __future__ import annotations

@@ -5,7 +5,7 @@ Maps detected technologies into CPE identifiers
 for vulnerability intelligence lookup.
 
 Version:
-v1.0.20
+v1.1.0
 """
 
 from typing import Dict, List
