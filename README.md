@@ -1,31 +1,66 @@
-# 🛡️ CyberRecon AI
+<!-- ========================================================= -->
+<!-- CyberRecon AI README                                      -->
+<!-- Version : v1.1.0                                          -->
+<!-- Author  : Jay Itape                                       -->
+<!-- ========================================================= -->
+
+<h1 align="center">🛡️ CyberRecon AI</h1>
+
+<p align="center">
+<b>Enterprise Website Security Assessment Toolkit</b>
+<br>
+Automated Reconnaissance • Vulnerability Intelligence • Risk Analysis • Professional Reporting
+</p>
 
 <p align="center">
 
-![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)
-![Version](https://img.shields.io/badge/Version-v1.1.0-success.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
-![Type Checked](https://img.shields.io/badge/mypy-100%25%20Clean-brightgreen.svg)
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-lightgrey.svg)
-![Status](https://img.shields.io/badge/Status-Production%20Ready-success.svg)
+![Version](https://img.shields.io/badge/Version-v1.1.0-0A66C2?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux-success?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+![Type Checked](https://img.shields.io/badge/mypy-100%25-success?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Enterprise%20Ready-brightgreen?style=for-the-badge)
+
+</p>
+
+<p align="center">
+
+CyberRecon AI is an enterprise-inspired security assessment framework built in Python for **authorized defensive security assessments**.
+
+It automates target reconnaissance, security intelligence collection, vulnerability correlation, security risk analysis and generates professional HTML, JSON and PDF security assessment reports.
 
 </p>
 
 ---
 
-# 🚀 CyberRecon AI
+# 📖 Table of Contents
 
-**CyberRecon AI** is an enterprise-inspired **Website Security Assessment Toolkit** developed in Python for **authorized defensive security assessments**.
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Architecture](#-architecture)
+- [Workflow](#-workflow)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Reports](#-reports)
+- [Project Structure](#-project-structure)
+- [Modules](#-modules-overview)
+- [Technologies](#-technologies-used)
+- [Security Coverage](#-security-coverage)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [Disclaimer](#-disclaimer)
+- [License](#-license)
+- [Author](#-author)
 
-It automates reconnaissance, security intelligence collection, vulnerability correlation, risk analysis, and generates professional security assessment reports.
+---
 
-CyberRecon AI follows a clean modular architecture with:
+# 🚀 Overview
 
-- Enterprise logging
-- Intelligent caching
-- Concurrent processing
-- Rich terminal dashboard
-- Strong type safety using **mypy**
+CyberRecon AI is a modular Python framework designed to automate web security reconnaissance and security intelligence gathering.
+
+The project combines multiple reconnaissance and security assessment techniques into a single enterprise-style workflow.
+
+Unlike traditional scripts that only scan ports or retrieve WHOIS information, CyberRecon AI correlates collected information into meaningful security findings and generates professional assessment reports.
 
 ---
 
@@ -33,10 +68,11 @@ CyberRecon AI follows a clean modular architecture with:
 
 ## 🌐 Target Intelligence
 
-- Domain Analysis
+- Target Validation
+- Domain Resolution
 - WHOIS Lookup
 - DNS Enumeration
-- Subdomain Discovery
+- Subdomain Enumeration
 
 ---
 
@@ -53,416 +89,629 @@ CyberRecon AI follows a clean modular architecture with:
 
 ## 🧠 Vulnerability Intelligence
 
-- National Vulnerability Database (NVD) Integration
-- CPE Based Vulnerability Matching
-- CVSS Information Extraction
+- NVD Integration
+- CPE Mapping
+- CVE Correlation
+- CVSS Extraction
 - Vulnerability Intelligence Engine
 
 ---
 
 ## 📊 Risk Analysis
 
-- Security Risk Score Calculation
-- Risk Level Classification
-- Security Findings Generation
-- Vulnerability Summary
+- Enterprise Risk Engine
+- Security Score Calculation
+- Risk Classification
+- Security Findings
+- Executive Summary
 
 ---
 
-## 📄 Reporting System
+## 📄 Professional Reporting
 
-CyberRecon AI generates:
+CyberRecon AI automatically generates:
 
-- Professional HTML Reports
-- JSON Security Reports
-- Enterprise PDF Reports
+- HTML Security Report
+- JSON Report
+- Enterprise PDF Report
 
-Reports include:
+Each report includes:
 
 - Scan Metadata
 - Scan ID
-- Duration
-- Security Score
+- Scan Duration
+- Target Information
 - Findings
-- Technical Details
+- Risk Score
 - Recommendations
 
 ---
 
-## ⚙️ Enterprise Features
+## ⚡ Enterprise Features
 
-- Modular Python Architecture
-- Enterprise Logging Framework
-- JSON Cache Manager
-- Concurrent Intelligence Collection
-- Rich Terminal UI Dashboard
-- Type Hints
-- 100% mypy Clean Codebase
+- Modular Architecture
+- Enterprise Logging
+- Concurrent Processing
+- Intelligent Cache Manager
+- Rich Terminal Dashboard
+- Type Safety (mypy)
+- Clean Python Codebase
+- Production Ready Structure
 
 ---
 
-# 🏗️ Architecture
+# 🏗 Architecture
 
-                User / CLI
-                   |
-                   v
-            Target Analysis
-                   |
-    +--------------+--------------+
-    |              |              |
-    v              v              v
-  WHOIS          DNS        SSL/TLS
-    |              |              |
-    +--------------+--------------+
-                   |
-                   v
-          HTTP Security Headers
-                   |
-                   v
+```text
+                    User
+
+                      │
+
+                      ▼
+
+             Target Analysis
+
+                      │
+
+      ┌───────────────┼───────────────┐
+
+      ▼               ▼               ▼
+
+   WHOIS            DNS            SSL/TLS
+
+      │               │               │
+
+      └───────────────┼───────────────┘
+
+                      ▼
+
+         HTTP Header Analysis
+
+                      ▼
+
         Technology Detection
-                   |
-                   v
-        Subdomain Enumeration
-                   |
-                   v
-         Port & Service Scanner
-                   |
-                   v
-      Vulnerability Intelligence
-                   |
-                   v
-             Risk Engine
-                   |
-                   v
-      HTML + JSON + PDF Reports
+
+                      ▼
+
+       Vulnerability Intelligence
+
+                      ▼
+
+             Security Risk Engine
+
+                      ▼
+
+       HTML │ JSON │ PDF Reports
+```
 
 ---
 
-# 🎯 Project Objectives
+# 🔄 Assessment Workflow
 
-CyberRecon AI is designed to:
-
-- Automate website reconnaissance
-- Identify common security weaknesses
-- Collect security intelligence
-- Perform vulnerability correlation
-- Generate professional assessment reports
-- Demonstrate enterprise Python development practices
-- Provide an extensible cybersecurity research platform
+```text
+Validate Target
+      │
+      ▼
+WHOIS Lookup
+      │
+      ▼
+DNS Enumeration
+      │
+      ▼
+SSL/TLS Inspection
+      │
+      ▼
+HTTP Header Analysis
+      │
+      ▼
+Technology Detection
+      │
+      ▼
+Port & Service Scan
+      │
+      ▼
+robots.txt Analysis
+      │
+      ▼
+Vulnerability Intelligence
+      │
+      ▼
+Risk Engine
+      │
+      ▼
+Professional Report Generation
+```
 
 ---
 
-# ⭐ Project Highlights
+# 📸 Project Preview
 
-✅ Enterprise-inspired security workflow  
-✅ Modular Python architecture  
-✅ Professional logging system  
-✅ Intelligent caching mechanism  
-✅ Concurrent processing framework  
-✅ Rich terminal dashboard  
-✅ HTML, JSON & PDF reporting  
-✅ 100% mypy clean codebase  
-✅ Portfolio-ready cybersecurity project  
+> Screenshots will be added in the next release.
 
----
-
-# ⚠️ Disclaimer
-
-CyberRecon AI is intended **only for authorized defensive security assessments and educational purposes**.
-
-Do not scan systems without explicit permission from the owner.
-
-The author is not responsible for misuse of this software.
+```text
+assets/
+├── banner.png
+├── dashboard.png
+├── ssl.png
+├── headers.png
+├── vulnerability.png
+├── report.png
+└── summary.png
+```
 
 ---
 
-# 📂 Project Structure
+## 🌟 Highlights
 
+- Enterprise-inspired architecture
+- Rich terminal interface
+- Professional reporting system
+- Concurrent execution engine
+- Modular Python design
+- Security intelligence correlation
+- Vulnerability analysis
+- Risk-based assessment
+- Clean code with type hints
+- 100% mypy clean
+- Defensive security focused
+- Portfolio-ready cybersecurity project
 
-CyberReconAI/
-
-├── cache/
-│ └── nvd_cache.json
-
-├── modules/
-│
-│ ├── banner.py
-│ ├── cache_manager.py
-│ ├── cli.py
-│ ├── concurrent.py
-│ ├── dns_lookup.py
-│ ├── http_headers.py
-│ ├── json_report.py
-│ ├── logger.py
-│ ├── nvd_client.py
-│ ├── pdf_generator.py
-│ ├── port_scanner.py
-│ ├── report_generator.py
-│ ├── risk_engine.py
-│ ├── robots_analyzer.py
-│ ├── scan_id.py
-│ ├── scan_timer.py
-│ ├── service_detector.py
-│ ├── ssl_checker.py
-│ ├── subdomain_enum.py
-│ ├── target.py
-│ ├── technology_detector.py
-│ ├── ui.py
-│ ├── version.py
-│ ├── vulnerability_intel.py
-│ └── whois_lookup.py
-│
-├── reports/
-
-├── tests/
-
-├── main.py
-
-├── requirements.txt
-
-├── README.md
-
-└── LICENSE
-
+---
 
 ---
 
 # ⚙️ Requirements
 
-- Python 3.12+
-- Internet Connection
-- Windows / Linux
+CyberRecon AI has been tested on modern Windows and Linux environments.
+
+| Requirement | Version |
+|-------------|---------|
+| Python | 3.12+ |
+| Operating System | Windows / Linux |
+| Internet Connection | Required |
+| Git | Recommended |
 
 ---
 
 # 📦 Installation
 
-## Clone Repository
+## 1️⃣ Clone the Repository
 
 ```bash
 git clone https://github.com/jayitape/CyberReconAI.git
-Enter Directory
+
 cd CyberReconAI
-Create Virtual Environment
-Windows
+```
+
+---
+
+## 2️⃣ Create a Virtual Environment
+
+### Windows
+
+```powershell
 python -m venv venv
+```
 
 Activate:
 
+```powershell
 venv\Scripts\activate
-Linux
+```
+
+---
+
+### Linux
+
+```bash
 python3 -m venv venv
+```
 
 Activate:
 
+```bash
 source venv/bin/activate
-Install Dependencies
+```
+
+---
+
+## 3️⃣ Install Dependencies
+
+```bash
 pip install -r requirements.txt
-🚀 Running CyberRecon AI
+```
 
-Basic Scan:
+---
 
+## 4️⃣ Verify Installation
+
+```bash
+python main.py --help
+```
+
+If everything is installed correctly, CyberRecon AI will display the available command-line options.
+
+---
+
+# 🚀 Usage
+
+## Basic Scan
+
+```bash
 python main.py --url google.com
+```
 
-Usage:
+---
 
-python main.py --url <target>
+## Scan Any Website
 
-Example:
-
+```bash
 python main.py --url example.com
-📊 Generated Reports
+```
 
-After every successful scan CyberRecon AI generates:
+---
 
-HTML Report
+## Example
+
+```bash
+python main.py --url openai.com
+```
+
+---
+
+# 🖥 Example Terminal Output
+
+```text
+CyberRecon AI Enterprise Edition
+
+✓ Target Validation
+✓ WHOIS Lookup
+✓ DNS Enumeration
+✓ SSL/TLS Analysis
+✓ HTTP Security Headers
+✓ Technology Detection
+✓ Port Scan
+✓ Vulnerability Intelligence
+✓ Risk Assessment
+
+Security Score : 91/100
+Risk Level     : LOW
+
+Reports Generated Successfully
+```
+
+---
+
+# 📄 Generated Reports
+
+CyberRecon AI automatically generates professional reports after every successful assessment.
+
+---
+
+## 🌐 HTML Report
+
+The HTML report provides an interactive security assessment suitable for browsers.
 
 Includes:
 
-Executive Summary
-Target Information
-WHOIS Data
-DNS Records
-SSL Analysis
-HTTP Headers
-Technologies
-Ports
-Services
-Vulnerabilities
-Risk Assessment
-JSON Report
+- Executive Summary
+- Target Information
+- WHOIS Information
+- DNS Records
+- SSL/TLS Analysis
+- HTTP Security Headers
+- Technology Detection
+- Port Scan Results
+- Service Detection
+- Vulnerability Intelligence
+- Risk Assessment
+- Security Recommendations
+
+---
+
+## 📑 JSON Report
+
+The JSON report is intended for automation and integrations.
+
+Includes:
+
+- Scan Metadata
+- Scan ID
+- Timestamp
+- Target Information
+- Security Findings
+- Risk Score
+- Vulnerability Intelligence
+- Scan Duration
+
+---
+
+## 📕 PDF Report
+
+Professional assessment document generated automatically.
 
 Contains:
 
-Scan Metadata
-Scan ID
-Scan Duration
-Target Details
-Security Findings
-Vulnerability Intelligence
-Risk Score
-PDF Report
+- Executive Summary
+- Security Score
+- Risk Level
+- Technical Findings
+- Recommendations
+- Assessment Details
 
-Professional security assessment document containing:
+---
 
-Security Summary
-Technical Findings
-Risk Classification
-Recommendations
-Assessment Details
-🔧 Logging
+# 📊 Report Features
 
-CyberRecon AI provides enterprise logging for:
+| Report | Supported |
+|---------|-----------|
+| HTML Report | ✅ |
+| JSON Report | ✅ |
+| PDF Report | ✅ |
+| Executive Summary | ✅ |
+| Scan Metadata | ✅ |
+| Security Findings | ✅ |
+| Risk Score | ✅ |
+| Recommendations | ✅ |
 
-Scan Start
-Scan Completion
-API Requests
-Cache Events
-Errors
-Report Generation
-🧩 Modules Overview
-Module	Description
-banner.py	Startup banner
-cli.py	CLI argument handling
-target.py	Target validation
-whois_lookup.py	WHOIS intelligence
-dns_lookup.py	DNS enumeration
-ssl_checker.py	SSL/TLS analysis
-http_headers.py	HTTP security headers
-technology_detector.py	Technology detection
-subdomain_enum.py	Subdomain discovery
-port_scanner.py	TCP port scanning
-service_detector.py	Service detection
-robots_analyzer.py	robots.txt analysis
-nvd_client.py	NVD integration
-vulnerability_intel.py	Vulnerability correlation
-risk_engine.py	Risk calculation
-report_generator.py	HTML reports
-json_report.py	JSON reports
-pdf_generator.py	PDF reports
-ui.py	Enterprise Rich dashboard
-concurrent.py	Concurrent processing
-cache_manager.py	Intelligence caching
-version.py	Version management
-logger.py	Logging framework
-🛠️ Technologies Used
-Language
-Python 3.12+
-Libraries
-requests
-rich
-dnspython
-python-whois
-beautifulsoup4
-Wappalyzer
-jinja2
-playwright
-Development Tools
-VS Code
-Git
-GitHub
-mypy
-pytest
-📊 Security Coverage
+---
 
-CyberRecon AI currently performs:
+# 📂 Project Structure
 
-✅ WHOIS Enumeration
-✅ DNS Enumeration
-✅ SSL/TLS Inspection
-✅ HTTP Header Analysis
-✅ Technology Detection
-✅ Subdomain Discovery
-✅ Port Scanning
-✅ Service Detection
-✅ robots.txt Analysis
-✅ NVD CVE Intelligence
-✅ Risk Assessment
-✅ Professional Reporting
+```text
+CyberReconAI/
+│
+├── cache/
+│   └── nvd_cache.json
+│
+├── config/
+│   └── config.yaml
+│
+├── modules/
+│   ├── banner.py
+│   ├── cache_manager.py
+│   ├── cli.py
+│   ├── concurrent.py
+│   ├── concurrent_scanner.py
+│   ├── cpe_mapper.py
+│   ├── cve_parser.py
+│   ├── dns_lookup.py
+│   ├── http_headers.py
+│   ├── json_report.py
+│   ├── logger.py
+│   ├── nvd_client.py
+│   ├── pdf_generator.py
+│   ├── port_scanner.py
+│   ├── report_generator.py
+│   ├── risk_engine.py
+│   ├── robots_analyzer.py
+│   ├── scan_id.py
+│   ├── scan_timer.py
+│   ├── service_detector.py
+│   ├── ssl_checker.py
+│   ├── subdomain_enum.py
+│   ├── target.py
+│   ├── technology_detector.py
+│   ├── ui.py
+│   ├── version.py
+│   ├── vulnerability_intel.py
+│   ├── vulnerability_intelligence.py
+│   └── whois_lookup.py
+│
+├── reports/
+├── tests/
+├── output/
+├── assets/
+│
+├── main.py
+├── requirements.txt
+├── README.md
+├── LICENSE
+└── CHANGELOG.md
+```
 
-🚀 Roadmap
-✅ Version 1.1.0
+---
 
-Completed:
+# 📁 Output Directory
 
-Enterprise Rich UI Dashboard
-Concurrent Processing Framework
-Improved Risk Visualization
-Enhanced Reporting Workflow
-Type Hardening
-Production-ready Architecture
-🔜 Version 1.2.0
+After every scan, CyberRecon AI stores generated reports inside the `reports/` directory.
 
-Planned:
+Example:
 
-EPSS Integration
-CISA KEV Integration
-ExploitDB Intelligence
-AI Risk Analysis
-Advanced Vulnerability Correlation
-Additional Security Checks
-⚡ Performance Features
-Modular design
-Intelligent caching
-Concurrent execution
-Reduced API requests
-Clean error handling
-Type-safe development
-📈 Current Project Status
-Component	Status
-Target Analysis	✅ Complete
-WHOIS Lookup	✅ Complete
-DNS Enumeration	✅ Complete
-SSL Analysis	✅ Complete
-HTTP Headers	✅ Complete
-Technology Detection	✅ Complete
-Subdomain Enumeration	✅ Complete
-Port Scanner	✅ Complete
-Service Detection	✅ Complete
-robots.txt Analyzer	✅ Complete
-NVD Integration	✅ Complete
-Vulnerability Intelligence	✅ Complete
-Risk Engine	✅ Complete
-HTML Report	✅ Complete
-JSON Report	✅ Complete
-PDF Report	✅ Complete
-Enterprise UI	✅ Complete
-Concurrent Processing	✅ Complete
-mypy Type Hardening	✅ Complete
-🤝 Contributing
+```text
+reports/
+
+google_com_report.html
+
+google_com_report.json
+
+google_com_report.pdf
+```
+
+---
+
+# 📌 Scan Metadata
+
+Each assessment includes:
+
+- Scan ID
+- Timestamp
+- Target
+- Scan Duration
+- Risk Score
+- Risk Level
+- Findings
+- Report Generation Status
+
+---
+
+# 🧩 Modules Overview
+
+| Module | Purpose |
+|---------|---------|
+| `banner.py` | Startup banner |
+| `cli.py` | Command-line argument handling |
+| `target.py` | Target validation |
+| `whois_lookup.py` | WHOIS intelligence |
+| `dns_lookup.py` | DNS enumeration |
+| `ssl_checker.py` | SSL/TLS certificate analysis |
+| `http_headers.py` | HTTP security header analysis |
+| `technology_detector.py` | Technology fingerprinting |
+| `subdomain_enum.py` | Subdomain discovery |
+| `port_scanner.py` | TCP port scanning |
+| `service_detector.py` | Service detection |
+| `robots_analyzer.py` | robots.txt analysis |
+| `nvd_client.py` | National Vulnerability Database integration |
+| `vulnerability_intelligence.py` | Vulnerability intelligence engine |
+| `risk_engine.py` | Security risk scoring |
+| `report_generator.py` | HTML report generation |
+| `json_report.py` | JSON report generation |
+| `pdf_generator.py` | PDF report generation |
+| `cache_manager.py` | Cache management |
+| `logger.py` | Logging framework |
+| `ui.py` | Rich terminal interface |
+| `version.py` | Version information |
+
+---
+---
+
+## 📈 Current Project Status
+
+| Component | Status |
+|-----------|--------|
+| Target Analysis | ✅ Complete |
+| WHOIS Lookup | ✅ Complete |
+| DNS Enumeration | ✅ Complete |
+| SSL/TLS Analysis | ✅ Complete |
+| HTTP Header Analysis | ✅ Complete |
+| Technology Detection | ✅ Complete |
+| Subdomain Enumeration | ✅ Complete |
+| Port Scanner | ✅ Complete |
+| Service Detection | ✅ Complete |
+| robots.txt Analyzer | ✅ Complete |
+| Vulnerability Intelligence | ✅ Complete |
+| NVD Integration | ✅ Complete |
+| Risk Engine | ✅ Complete |
+| HTML Report Generator | ✅ Complete |
+| JSON Report Generator | ✅ Complete |
+| PDF Report Generator | ✅ Complete |
+| Enterprise Rich Dashboard | ✅ Complete |
+| Concurrent Processing | ✅ Complete |
+| Intelligent Cache Manager | ✅ Complete |
+| 100% mypy Clean | ✅ Complete |
+
+---
+
+# 🚀 Roadmap
+
+## ✅ Version 1.1.0 (Current)
+
+- Enterprise Rich Terminal Dashboard
+- Concurrent Scan Framework
+- Risk Engine
+- Professional HTML Reports
+- JSON Reports
+- PDF Reports
+- Vulnerability Intelligence
+- NVD Integration
+- Intelligent Cache Manager
+- Enterprise Logging
+- Type Hardening
+- 100% mypy Clean
+
+---
+
+## 🔜 Version 1.2.0
+
+Planned improvements:
+
+- EPSS Integration
+- CISA KEV Integration
+- ExploitDB Intelligence
+- AI Risk Correlation
+- Better Technology Fingerprinting
+- Improved Service Detection
+- Smarter Vulnerability Prioritization
+- Additional Security Checks
+
+---
+
+# ⚡ Performance
+
+CyberRecon AI is optimized using:
+
+- ⚡ Concurrent execution
+- ⚡ Intelligent caching
+- ⚡ Modular architecture
+- ⚡ Reduced external API requests
+- ⚡ Clean error handling
+- ⚡ Enterprise logging
+- ⚡ Type-safe Python development
+
+---
+
+# 🤝 Contributing
 
 Contributions are welcome.
 
-Please ensure:
+Please ensure that:
 
-Type hints included
-Code follows project architecture
-mypy checks pass
-Documentation updated
-📜 License
+- Code follows the existing project architecture.
+- Type hints are included.
+- `mypy` passes successfully.
+- Documentation is updated.
+- New modules follow enterprise coding standards.
 
-MIT License
+---
 
-👨‍💻 Author
+# 📜 License
 
-Jay Itape
+This project is licensed under the **MIT License**.
+
+See the **LICENSE** file for more information.
+
+---
+
+# 👨‍💻 Author
+
+## Jay Itape
 
 Electronics & Telecommunication Engineering Student
+
 Cybersecurity Enthusiast
+
 CEH Candidate
 
-GitHub:
+### Connect with me
 
-https://github.com/jayitape
+- GitHub: **https://github.com/jayitape**
 
-<p align="center">
+---
 
-CyberRecon AI v1.1.0
+# ⚠️ Legal Disclaimer
 
-Enterprise Website Security Assessment Toolkit
+CyberRecon AI is developed solely for:
 
-Developed with ❤️ in Python
+- Authorized Defensive Security Assessments
+- Security Research
+- Educational Purposes
+
+Unauthorized scanning of systems without explicit permission may violate applicable laws.
+
+The author assumes **no responsibility** for misuse of this software.
+
+---
+
+<div align="center">
+
+# 🛡️ CyberRecon AI
+
+### Enterprise Website Security Assessment Toolkit
+
+**Version 1.1.0**
+
+Developed with ❤️ using Python
 
 © 2026 Jay Itape
 
-</p>
+</div>
