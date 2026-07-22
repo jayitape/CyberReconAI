@@ -23,6 +23,7 @@ from rich.table import Table
 from rich.text import Text
 from pyfiglet import Figlet
 from rich import box
+from modules.version import VERSION
 import platform
 import sys
 
@@ -92,7 +93,7 @@ def show_banner():
         style="white",
     )
     subtitle.append("Enterprise Edition\n\n", style="bold red")
-    subtitle.append("Version : v1.0.21\n", style="bright_white")
+    subtitle.append(f"Version : v{VERSION}\n", style="bright_white")
     subtitle.append(
         f"Python  : {sys.version_info.major}.{sys.version_info.minor}\n",
         style="bright_white",
